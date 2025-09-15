@@ -15,8 +15,9 @@ jobs:
                 username: ${{ secrets.DOCKER_USERNAME }}
                 password: ${{ secrets.DOCKER_PASSWORD }}
             - name: Build and push
-              uses: hoverkraft-tech/compose-action@v2.3.0
+              uses: docker/build-push-action@v5
               with:
                 push: true
                 tags: ${{ secrets.DOCKER_TAG }}
-                up-flags: "--build"
+            - name: Test run
+              run: docker compose up --build
