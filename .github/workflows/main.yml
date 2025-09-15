@@ -17,7 +17,7 @@ jobs:
             - name: Build and push
               uses: hoverkraft-tech/compose-action@v2.3.0
               with:
-                compose-file: "../docker-compose.yml"
+                compose-file: "home/runner/work/aurora_platform_demo/docker-compose.yml"
                 up-flags: "--build"
                 push: true
                 tags: ${{ secrets.DOCKER_TAG }}
