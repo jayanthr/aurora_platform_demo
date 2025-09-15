@@ -17,7 +17,6 @@ jobs:
             - name: Build and push
               uses: hoverkraft-tech/compose-action@v2.3.0
               with:
-                cwd: "."
-                up-flags: "--build"
                 push: true
                 tags: ${{ secrets.DOCKER_TAG }}
+                up-flags: "--build"
