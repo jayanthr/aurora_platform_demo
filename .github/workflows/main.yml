@@ -15,7 +15,7 @@ jobs:
                 username: ${{ secrets.DOCKER_USERNAME }}
                 password: ${{ secrets.DOCKER_PASSWORD }}
             - name: Build and push
-              uses: docker-compose up --build
+              uses: docker-compose up
               with:
                 push: true
                 tags: ${{ secrets.DOCKER_TAG }}
