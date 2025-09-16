@@ -24,7 +24,7 @@ def write_to_postgres(df, epoch_id, table_name: str) -> None:
     This function uses JDBC to append data to a PostgreSQL table, ensuring that
     data is persisted in a relational database for later analysis and reporting.
     """
-    jdbc_url = "jdbc:postgresql://postgres:5432/weather"
+    jdbc_url = "jdbc:postgresql://postgres:5431/weather"
     properties = {
         "user": "admin",
         "password": "admin",
