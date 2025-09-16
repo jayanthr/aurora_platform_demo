@@ -1,50 +1,16 @@
-version: "3.3"
+# Aurora dashboard demo
 
 networks:
   bridge:
     driver: bridge
 
 services:
-  # webapp:
-  #   image: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
-  #   depends_on:
-  #     kafka:
-  #         condition: service_started
-  #     spark-master:
-  #         condition: service_started
-  #     spark-worker:
-  #         condition: service_started
-  #     kafka-producer:
-  #         condition: service_started
-  #     postgres:
-  #         condition: service_started
-  #     spark_job:
-  #         condition: service_started
-  #   networks:
-  #     bridge:
-  #       aliases:
-  #         - webapp
-    
-
-  # zookeeper:
-  #   #container_name: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
-  #   image: confluentinc/cp-zookeeper:latest
-  #   environment:
-  #     ZOOKEEPER_CLIENT_PORT: 32181
-  #     ZOOKEEPER_TICK_TIME: 2000
-  #   networks:
-  #     bridge:
-  #       aliases:
-  #         - zookeeper
 
   kafka:
-    #container_name: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
     image: confluentinc/cp-kafka:latest
     ports:
       - '9092:9092'
       - '29092:29092'
-    #depends_on:
-    #  - zookeeper
     environment:
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
@@ -64,7 +30,6 @@ services:
           - kafka
 
   kafka-producer:
-    #container_name: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
     build: ./kafka_producer
     depends_on:
       - kafka
@@ -76,7 +41,6 @@ services:
           - kafka-producer
 
   spark-master:
-    #container_name: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
     image: apache/spark:python3
     ports:
       - "8080:8080"  
@@ -88,7 +52,6 @@ services:
           - spark-master
 
   spark-worker:
-    #container_name: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
     image: apache/spark:python3
     depends_on:
       - spark-master
@@ -99,13 +62,10 @@ services:
           - spark-worker
 
   spark_job:
-    #container_name: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
     build: ./spark_jobs
     depends_on:
-      #- kafka
       - spark-master
       - spark-worker
-      #- kafka-producer
       - postgres
     networks:
       - bridge
@@ -113,7 +73,6 @@ services:
       - SPARK_MASTER_URL=spark://spark-master:7077
 
   postgres:
-    #container_name: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
     image: postgres:16
     environment:
       POSTGRES_DB: weather
@@ -129,7 +88,6 @@ services:
           - postgres
 
   dash_app:
-    # container_name: jayanth-dash
     build: ./dash_app
     ports:
       - "8050:8050"
@@ -145,11 +103,8 @@ services:
       bridge:
         aliases:
           - dash_app
-    
-
 
   kafka-rest-proxy:
-    #container_name: registry.cloud.cbh.kth.se/deploy-e8bd8e90-8e86-4566-a911-08fb57df79ae/aurora-platform
     image: confluentinc/cp-kafka-rest:7.5.0
     depends_on:
       - kafka
@@ -163,3 +118,4 @@ services:
       bridge:
         aliases:
           - kafka-rest-proxy
+
